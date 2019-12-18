@@ -1,8 +1,10 @@
 package org.udacity.ohmyboardgame.ui;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.udacity.ohmyboardgame.R;
 import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.BoardGames;
+import org.udacity.ohmyboardgame.utility.ImageLoader;
 
 public class GamesViewAdapter extends RecyclerView.Adapter<GamesViewAdapter.GameViewHolder> {
+    private static final String TAG = GamesViewAdapter.class.getSimpleName();
 
     private BoardGames games;
 
@@ -34,7 +38,8 @@ public class GamesViewAdapter extends RecyclerView.Adapter<GamesViewAdapter.Game
     @Override
     public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
         BoardGame game = games.list.get(position);
-        holder.name.setText(game.name.value);
+        //Log.d(TAG, "Thumbnail: " + game.thumbnail.value);
+        ImageLoader.fetchImageIntoView(game.thumbnail.value, holder.thumbnail);
     }
 
     @Override
@@ -44,10 +49,11 @@ public class GamesViewAdapter extends RecyclerView.Adapter<GamesViewAdapter.Game
 
     public class GameViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
+        public ImageView thumbnail;
 
         public GameViewHolder(View view) {
             super(view);
-            name = view.findViewById(R.id.game_name);
+            thumbnail = view.findViewById(R.id.game_thumbnail);
         }
 
     }

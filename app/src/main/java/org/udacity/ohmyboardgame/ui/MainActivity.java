@@ -1,6 +1,7 @@
 package org.udacity.ohmyboardgame.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         boardGamesList = findViewById(R.id.board_games_list_view);
         boardGamesList.setAdapter(adapter);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         boardGamesList.setLayoutManager(layoutManager);
 
         boardGameGeek.fetchHotGames();
