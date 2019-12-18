@@ -12,4 +12,17 @@
     <dimen name="details_block_title_top_and_bottom_padding">8dp</dimen>
     <dimen name="details_block_title_top_margin">8dp</dimen>
     <dimen name="details_block_title_text_size">22sp</dimen>
+
+    <dimen name="details_overview_grid_view_top_margin">8dp</dimen>
+    <dimen name="details_overview_grid_view_left_and_right_margin">16dp</dimen>
+    <integer name="details_overview_grid_view_column_count">2</integer>
+    <dimen name="details_overview_item_bottom_margin">8dp</dimen>
+    <dimen name="details_overview_item_left_and_right_margins">32dp</dimen>
+    <dimen name="details_overview_left_margin">16dp</dimen>
+    <dimen name="details_overview_text_size">18sp</dimen>
+
+    <dimen name="details_description_content_top_and_bottom_margin">8dp</dimen>
+    <dimen name="details_description_content_left_and_right_margins">16dp</dimen>
+    <dimen name="details_description_content_text_size">18sp</dimen>
+    <dimen name="details_description_content_extra_line_spacing">4dp</dimen>
 </resources>

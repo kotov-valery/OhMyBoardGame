@@ -16,7 +16,6 @@ import org.udacity.ohmyboardgame.data.BoardGame;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView boardGamesList;
-    private BoardGameGeek boardGameGeek;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
         GamesViewAdapter adapter = new GamesViewAdapter(new GameClickedListener());
 
-        boardGameGeek = new BoardGameGeek(adapter);
-
         boardGamesList = findViewById(R.id.board_games_list_view);
         boardGamesList.setAdapter(adapter);
 
@@ -34,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 getResources().getInteger(R.integer.game_list_columns_count));
         boardGamesList.setLayoutManager(layoutManager);
 
-        boardGameGeek.fetchHotGames();
+        BoardGameGeek.fetchHotGames(adapter);
     }
 
     private class GameClickedListener implements GamesViewAdapter.OnGameClickListener {

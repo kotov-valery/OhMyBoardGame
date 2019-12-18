@@ -10,11 +10,84 @@
         android:layout_height="wrap_content"
         android:text="@string/overview_section" />
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/GameDetailsOverviewGridView" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GameDetailsOverviewItem" >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_average_rating" />
+            <TextView
+                android:id="@+id/game_average_rating"
+                style="@style/GameDetailsOverviewText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GameDetailsOverviewItem" >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_player" />
+            <TextView
+                android:id="@+id/game_players_count"
+                style="@style/GameDetailsOverviewText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GameDetailsOverviewItem" >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_playing_time" />
+            <TextView
+                android:id="@+id/game_playing_time"
+                style="@style/GameDetailsOverviewText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/GameDetailsOverviewItem" >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_average_complexity" />
+            <TextView
+                android:id="@+id/game_average_complexity"
+                style="@style/GameDetailsOverviewText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </GridLayout>
+
     <TextView
         style="@style/GameDetailsBlockTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/description_section" />
+
+    <TextView
+        android:id="@+id/game_description"
+        style="@style/GameDetailsDescriptionContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
 

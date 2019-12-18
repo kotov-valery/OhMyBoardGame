@@ -35,4 +35,36 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="GameDetailsDescriptionContent">
+        <item name="android:layout_marginTop">@dimen/details_description_content_top_and_bottom_margin</item>
+        <item name="android:layout_marginBottom">@dimen/details_description_content_top_and_bottom_margin</item>
+        <item name="android:layout_marginLeft">@dimen/details_description_content_left_and_right_margins</item>
+        <item name="android:layout_marginRight">@dimen/details_description_content_left_and_right_margins</item>
+        <item name="android:textSize">@dimen/details_description_content_text_size</item>
+        <item name="android:lineSpacingExtra">@dimen/details_description_content_extra_line_spacing</item>
+    </style>
+
+    <style name="GameDetailsOverviewGridView">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">@dimen/details_overview_grid_view_top_margin</item>
+        <item name="android:layout_marginLeft">@dimen/details_overview_grid_view_left_and_right_margin</item>
+        <item name="android:layout_marginRight">@dimen/details_overview_grid_view_left_and_right_margin</item>
+        <item name="android:layout_gravity">fill_horizontal</item>
+        <item name="android:columnCount">@integer/details_overview_grid_view_column_count</item>
+    </style>
+
+    <style name="GameDetailsOverviewItem">
+        <item name="android:layout_marginBottom">@dimen/details_overview_item_bottom_margin</item>
+        <item name="android:layout_marginLeft">@dimen/details_overview_item_left_and_right_margins</item>
+        <item name="android:layout_marginRight">@dimen/details_overview_item_left_and_right_margins</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="GameDetailsOverviewText">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/details_overview_left_margin</item>
+        <item name="android:textSize">@dimen/details_overview_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
