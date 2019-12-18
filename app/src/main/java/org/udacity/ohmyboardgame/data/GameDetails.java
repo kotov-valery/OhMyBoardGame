@@ -1,10 +1,14 @@
 package org.udacity.ohmyboardgame.data;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Element;
 
 @Root(name="item", strict = false)
 public class GameDetails {
+    @Attribute
+    public int id;
+
     @Element
     public String description;
 

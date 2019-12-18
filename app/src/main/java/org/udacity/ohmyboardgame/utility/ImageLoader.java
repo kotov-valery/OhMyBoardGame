@@ -12,8 +12,8 @@ public class ImageLoader {
         if (isUrlValid(imageUrl)) {
             Picasso.get()
                     .load(imageUrl)
-                    //.placeholder(R.drawable.user_placeholder_loading)
-                    //.error(R.drawable.user_placeholder_loading_error)
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_loading_failed)
                     .into(view);
         }
     }

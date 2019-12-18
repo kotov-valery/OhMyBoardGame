@@ -21,7 +21,11 @@ public class BoardGameGeek {
         void publishGameDetails(GameDetails details);
     }
 
-    public static void fetchHotGames(final GamesViewAdapter gamesViewAdapter) {
+    public interface GameListLoadedListener {
+        void onLoadingCompleted(BoardGames games);
+    }
+
+    public static void fetchHotGames(final GamesViewAdapter gamesViewAdapter, final GameListLoadedListener listener) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BoardGameGeekService.API_BASE_URL)
                 .addConverterFactory(SimpleXmlConverterFactory.create())
@@ -36,8 +40,8 @@ public class BoardGameGeek {
             public void onResponse(Call<BoardGames> call, Response<BoardGames> response) {
                 try {
                     BoardGames games = response.body();
-                    //Log.i(TAG, "Got response: " + games.list);
                     gamesViewAdapter.setNewGames(games);
+                    listener.onLoadingCompleted(games);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
