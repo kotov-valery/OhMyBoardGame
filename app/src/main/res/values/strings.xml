@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">OhMyBoardGame</string>
+    <string name="app_name">Oh My Board Game!</string>
+
+    <!-- Game details activity content -->
+    <string name="overview_section">Overview</string>
+    <string name="description_section">Description</string>
 </resources>

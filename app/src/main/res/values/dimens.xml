@@ -1,0 +1,15 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- main activity -->
+    <integer name="game_list_columns_count">2</integer>
+
+    <!-- details screen -->
+    <dimen name="details_content_top_padding">274dp</dimen>
+    <dimen name="details_game_title_padding">16dp</dimen>
+    <integer name="details_game_title_max_lines">2</integer>
+    <dimen name="details_game_title_text_size">32sp</dimen>
+    <dimen name="details_block_title_top_and_bottom_padding">8dp</dimen>
+    <dimen name="details_block_title_top_margin">8dp</dimen>
+    <dimen name="details_block_title_text_size">22sp</dimen>
+</resources>

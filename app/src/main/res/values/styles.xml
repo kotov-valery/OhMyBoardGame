@@ -9,4 +9,30 @@
         <item name="android:textColor">@color/primary_text</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="GameDetailsGameTitle" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textSize">@dimen/details_game_title_text_size</item>
+        <item name="android:padding">@dimen/details_game_title_padding</item>
+        <item name="android:maxLines">@integer/details_game_title_max_lines</item>
+    </style>
+
+    <style name="GameDetailsBlockTitle" parent="AppTheme">
+        <item name="android:paddingTop">@dimen/details_block_title_top_and_bottom_padding</item>
+        <item name="android:paddingBottom">@dimen/details_block_title_top_and_bottom_padding</item>
+        <item name="android:layout_marginTop">@dimen/details_block_title_top_margin</item>
+        <item name="android:textSize">@dimen/details_block_title_text_size</item>
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:background">@drawable/details_section_box</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

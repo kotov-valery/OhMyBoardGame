@@ -19,10 +19,19 @@ public class GamesViewAdapter extends RecyclerView.Adapter<GamesViewAdapter.Game
     private static final String TAG = GamesViewAdapter.class.getSimpleName();
 
     private BoardGames games;
+    private OnGameClickListener gameClickListener;
 
     public void setNewGames(BoardGames newValue) {
         games = newValue;
         notifyDataSetChanged();
+    }
+
+    public interface OnGameClickListener {
+        void onClick(BoardGame game);
+    }
+
+    public GamesViewAdapter(OnGameClickListener listener) {
+        gameClickListener = listener;
     }
 
     @NonNull
@@ -47,14 +56,22 @@ public class GamesViewAdapter extends RecyclerView.Adapter<GamesViewAdapter.Game
         return games == null ? 0 : games.list.size();
     }
 
-    public class GameViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
+    public class GameViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener {
         public ImageView thumbnail;
 
         public GameViewHolder(View view) {
             super(view);
             thumbnail = view.findViewById(R.id.game_thumbnail);
+            view.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition();
+            if (gameClickListener != null) {
+                gameClickListener.onClick(games.list.get(pos));
+            }
+        }
     }
 }
