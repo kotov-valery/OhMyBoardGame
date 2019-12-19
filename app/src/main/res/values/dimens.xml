@@ -3,6 +3,7 @@
 
     <!-- main activity -->
     <integer name="game_list_columns_count">2</integer>
+    <dimen name="thumbnail_height">260dp</dimen>
 
     <!-- details screen -->
     <dimen name="details_content_top_padding">274dp</dimen>

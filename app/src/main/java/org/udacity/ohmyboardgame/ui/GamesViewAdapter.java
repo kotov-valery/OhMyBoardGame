@@ -1,15 +1,11 @@
 package org.udacity.ohmyboardgame.ui;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.udacity.ohmyboardgame.R;
@@ -22,7 +18,6 @@ public class GamesViewAdapter extends RecyclerView.Adapter<GamesViewAdapter.Game
 
     private BoardGames games;
     private OnGameClickListener gameClickListener;
-
 
     public void setNewGames(BoardGames newValue) {
         games = newValue;

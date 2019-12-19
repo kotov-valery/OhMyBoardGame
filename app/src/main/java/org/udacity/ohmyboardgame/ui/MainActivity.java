@@ -3,6 +3,8 @@ package org.udacity.ohmyboardgame.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
@@ -23,13 +25,13 @@ import org.udacity.ohmyboardgame.backend.BoardGameGeek;
 import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.BoardGames;
 import org.udacity.ohmyboardgame.data.GameDetails;
+import org.udacity.ohmyboardgame.model.ArticleListModel;
 
-public class MainActivity extends AppCompatActivity
-    implements BoardGameGeek.GameListLoadedListener
-{
+public class MainActivity extends AppCompatActivity {
 
     private RecyclerView boardGamesList;
     private GamesViewAdapter adapter;
+    private ArticleListModel articleListModel;
 
     private static final int HIGHT_RESOLUTION_POSTER_PATH_LOADER = 0;
 
@@ -56,7 +58,14 @@ public class MainActivity extends AppCompatActivity
                 getResources().getInteger(R.integer.game_list_columns_count));
         boardGamesList.setLayoutManager(layoutManager);
 
-        BoardGameGeek.fetchHotGames(adapter, this);
+        articleListModel = ViewModelProviders.of(this).get(ArticleListModel.class);
+        articleListModel.getGames().observe(this, new Observer<BoardGames>() {
+            @Override
+            public void onChanged(BoardGames boardGames) {
+                adapter.setNewGames(boardGames);
+                fetchHightResolutionImages(boardGames);
+            }
+        });
     }
 
     private class GameClickedListener implements GamesViewAdapter.OnGameClickListener {
@@ -68,13 +77,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onLoadingCompleted(final BoardGames games) {
+    public void fetchHightResolutionImages(final BoardGames games) {
         getSupportLoaderManager().initLoader(HIGHT_RESOLUTION_POSTER_PATH_LOADER, null,
                 new LoaderManager.LoaderCallbacks<Void>() {
                     @Override
                     public Loader<Void> onCreateLoader(int id, Bundle args) {
-                        return new HightResolutionPosterPathLoader(getApplicationContext(), games, adapter);
+                        return new HighResolutionPosterPathLoader(getApplicationContext(), games, articleListModel);
                     }
 
                     @Override
@@ -87,23 +95,25 @@ public class MainActivity extends AppCompatActivity
                 }).forceLoad();
     }
 
-    private static class HightResolutionPosterPathLoader extends AsyncTaskLoader<Void>
+    private static class HighResolutionPosterPathLoader extends AsyncTaskLoader<Void>
             implements BoardGameGeek.GameDetailsPublisher
     {
         private BoardGames games;
-        private GamesViewAdapter adapter;
+        private ArticleListModel model;
 
-        public HightResolutionPosterPathLoader(Context context, BoardGames g, GamesViewAdapter a) {
+        public HighResolutionPosterPathLoader(Context context, BoardGames games, ArticleListModel model) {
             super(context);
-            games = g;
-            adapter = a;
+            this.games = games;
+            this.model = model;
         }
 
         @Nullable
         @Override
         public Void loadInBackground() {
             for (BoardGame game: games.list) {
-                BoardGameGeek.fetchGameDetails(game, this);
+                if (!game.isHighResolution) {
+                    BoardGameGeek.fetchGameDetails(game, this);
+                }
             }
             return null;
         }
@@ -113,10 +123,11 @@ public class MainActivity extends AppCompatActivity
             for (BoardGame game: games.list) {
                 if (game.id == details.id) {
                     game.thumbnail.value = details.image;
-                    adapter.notifyDataSetChanged();
+                    game.isHighResolution = true;
                     break;
                 }
             }
+            model.getGames().setValue(games);
         }
     }
 }

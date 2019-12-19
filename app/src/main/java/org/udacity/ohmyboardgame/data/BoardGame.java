@@ -4,7 +4,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-@Root(name="item")
+@Root(name = "item")
 public class BoardGame {
     @Attribute
     public int id;
@@ -14,6 +14,8 @@ public class BoardGame {
 
     @Element
     public Thumbnail thumbnail;
+
+    public boolean isHighResolution = false;
 
     @Element
     public Name name;
