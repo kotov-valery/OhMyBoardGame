@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +17,9 @@ import org.udacity.ohmyboardgame.R;
 import org.udacity.ohmyboardgame.backend.BoardGameGeek;
 import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.GameDetails;
+import org.udacity.ohmyboardgame.persistency.BoardGameDao;
+import org.udacity.ohmyboardgame.persistency.BoardGamesStorage;
+import org.udacity.ohmyboardgame.utility.AppExecutors;
 import org.udacity.ohmyboardgame.utility.ImageLoader;
 
 public class GameDetailActivity extends AppCompatActivity
@@ -27,6 +30,7 @@ public class GameDetailActivity extends AppCompatActivity
     public static final String GAME_OBJECT = "game-object";
 
     private BoardGame game;
+
     private ThreeTwoImageView preview;
     private TextView title;
     private TextView description;
@@ -34,6 +38,9 @@ public class GameDetailActivity extends AppCompatActivity
     private TextView avgComplexity;
     private TextView players;
     private TextView playingTime;
+    private FloatingActionButton saveToFavorites;
+
+    private BoardGamesStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +68,27 @@ public class GameDetailActivity extends AppCompatActivity
         players = findViewById(R.id.game_players_count);
         playingTime = findViewById(R.id.game_playing_time);
 
-        FloatingActionButton fab = findViewById(R.id.add_to_favorites);
-        fab.setOnClickListener(new View.OnClickListener() {
+        storage = BoardGamesStorage.getInstance(getApplicationContext());
+
+        saveToFavorites = findViewById(R.id.add_to_favorites);
+        saveToFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                game.isFavorite = !game.isFavorite;
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        BoardGameDao boardGameDao = storage.boardGameDao();
+                        if (game.isFavorite) {
+                            Log.d(TAG, "Adding a game " + game.name + " to favorites");
+                            boardGameDao.insertAGame(game);
+                        } else {
+                            Log.d(TAG, "Removing a game " + game.name + " from favorites");
+                            boardGameDao.deleteAGame(game);
+                        }
+                    }
+                });
+                updateFavoriteButton();
             }
         });
 
@@ -83,7 +105,14 @@ public class GameDetailActivity extends AppCompatActivity
             ImageLoader.fetchImageIntoView(game.thumbnail.value, preview);
 
             title.setText(game.name.value + "(" + game.publishYear.value + ")");
+
+            updateFavoriteButton();
         }
+    }
+
+    private void updateFavoriteButton() {
+        saveToFavorites.setImageResource(game.isFavorite ?
+                R.drawable.ic_favorite_filled : R.drawable.ic_favorite_empty);
     }
 
     @Override
