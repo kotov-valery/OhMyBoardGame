@@ -28,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import org.udacity.ohmyboardgame.R;
+import org.udacity.ohmyboardgame.appwidget.UpdateGameDetailsWidgetService;
 import org.udacity.ohmyboardgame.backend.BoardGameGeek;
 import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.BoardGames;
@@ -39,6 +40,7 @@ import org.udacity.ohmyboardgame.data.Thumbnail;
 import org.udacity.ohmyboardgame.model.ArticleListModel;
 import org.udacity.ohmyboardgame.persistency.BoardGamesStorage;
 import org.udacity.ohmyboardgame.utility.AppExecutors;
+import org.udacity.ohmyboardgame.utility.JSON;
 
 import java.util.List;
 
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(BoardGames boardGames) {
                     adapter.setNewGames(boardGames);
-                    fetchHightResolutionImages(boardGames);
+                    //fetchHighResolutionImages(boardGames);
                 }
             });
         } else if (filterCategory == FILTER_BY_MY_FAVORITES) {
@@ -152,8 +154,10 @@ public class MainActivity extends AppCompatActivity {
     private class GameClickedListener implements GamesViewAdapter.OnGameClickListener {
         @Override
         public void onClick(BoardGame game) {
+            UpdateGameDetailsWidgetService.startActionUpdateGameInfo(getApplicationContext(), game);
+
             Intent gameDetailsIntent = new Intent(MainActivity.this, GameDetailActivity.class);
-            gameDetailsIntent.putExtra(GameDetailActivity.GAME_OBJECT, (new Gson()).toJson(game));
+            gameDetailsIntent.putExtra(GameDetailActivity.GAME_OBJECT, JSON.toJson(game));
             startActivity(gameDetailsIntent);
         }
     }
@@ -230,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         public void publishGameDetails(GameDetails details) {
             for (BoardGame game: games.list) {
                 if (game.id == details.id) {
-                    game.thumbnail.value = details.image;
+                    game.image = details.image;
                     game.isHighResolution = true;
                     break;
                 }

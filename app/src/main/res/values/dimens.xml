@@ -2,35 +2,41 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- main activity -->
-    <integer name="game_list_columns_count">2</integer>
     <dimen name="thumbnail_height">260dp</dimen>
+    <dimen name="search_box_title_text_size">28sp</dimen>
 
     <!-- search box -->
-    <dimen name="search_box_title_text_size">28sp</dimen>
     <dimen name="search_box_icon_top_and_bottom_padding">8dp</dimen>
     <dimen name="search_box_icon_left_and_right_margin">16dp</dimen>
     <dimen name="search_box_edit_top_margin">16dp</dimen>
     <dimen name="search_box_edit_margins">8dp</dimen>
+    <dimen name="details_content_top_padding">274dp</dimen>
 
     <!-- details screen -->
-    <dimen name="details_content_top_padding">274dp</dimen>
     <dimen name="details_game_title_padding">16dp</dimen>
-    <integer name="details_game_title_max_lines">2</integer>
     <dimen name="details_game_title_text_size">32sp</dimen>
     <dimen name="details_block_title_top_and_bottom_padding">8dp</dimen>
     <dimen name="details_block_title_top_margin">8dp</dimen>
     <dimen name="details_block_title_text_size">22sp</dimen>
-
     <dimen name="details_overview_grid_view_top_margin">8dp</dimen>
     <dimen name="details_overview_grid_view_left_and_right_margin">16dp</dimen>
-    <integer name="details_overview_grid_view_column_count">2</integer>
+
     <dimen name="details_overview_item_bottom_margin">8dp</dimen>
     <dimen name="details_overview_item_left_and_right_margins">32dp</dimen>
     <dimen name="details_overview_left_margin">16dp</dimen>
     <dimen name="details_overview_text_size">18sp</dimen>
-
     <dimen name="details_description_content_top_and_bottom_margin">8dp</dimen>
     <dimen name="details_description_content_left_and_right_margins">16dp</dimen>
     <dimen name="details_description_content_text_size">18sp</dimen>
+
     <dimen name="details_description_content_extra_line_spacing">4dp</dimen>
+    <dimen name="widget_margin">8dp</dimen>
+    <integer name="game_list_columns_count">2</integer>
+    <integer name="details_game_title_max_lines">2</integer>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <integer name="details_overview_grid_view_column_count">2</integer>
 </resources>

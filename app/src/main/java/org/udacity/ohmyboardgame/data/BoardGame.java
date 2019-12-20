@@ -24,6 +24,8 @@ public class BoardGame {
     @Element
     public Thumbnail thumbnail;
 
+    public String image;
+
     @ColumnInfo(name = "is_high_resolution")
     public boolean isHighResolution = false;
 

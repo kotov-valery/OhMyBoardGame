@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.udacity.ohmyboardgame.R;
+import org.udacity.ohmyboardgame.appwidget.UpdateGameDetailsWidgetService;
 import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.GameDetails;
 import org.udacity.ohmyboardgame.model.GameDetailsViewModel;
@@ -25,6 +26,7 @@ import org.udacity.ohmyboardgame.persistency.BoardGameDao;
 import org.udacity.ohmyboardgame.persistency.BoardGamesStorage;
 import org.udacity.ohmyboardgame.utility.AppExecutors;
 import org.udacity.ohmyboardgame.utility.ImageLoader;
+import org.udacity.ohmyboardgame.utility.JSON;
 
 public class GameDetailActivity extends AppCompatActivity {
     private static final String TAG = GameDetailActivity.class.getSimpleName();
@@ -99,10 +101,10 @@ public class GameDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             if (intent != null && intent.hasExtra(GAME_OBJECT)) {
-                game = toBoardGame(intent.getStringExtra(GAME_OBJECT));
+                game = JSON.toBoardGame(intent.getStringExtra(GAME_OBJECT));
             }
         } else if (savedInstanceState.containsKey(GAME_OBJECT)) {
-            game = toBoardGame(savedInstanceState.getString(GAME_OBJECT));
+            game = JSON.toBoardGame(savedInstanceState.getString(GAME_OBJECT));
         }
 
         if (game != null) {
@@ -143,17 +145,9 @@ public class GameDetailActivity extends AppCompatActivity {
         }
     }
 
-    private static String toJson(BoardGame game) {
-        return (new Gson()).toJson(game);
-    }
-
-    private static BoardGame toBoardGame(String json) {
-        return (new Gson()).fromJson(json, BoardGame.class);
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(GAME_OBJECT, toJson(game));
+        outState.putString(GAME_OBJECT, JSON.toJson(game));
         super.onSaveInstanceState(outState);
     }
 
@@ -163,6 +157,8 @@ public class GameDetailActivity extends AppCompatActivity {
     }
 
     private void updateUI(GameDetails details) {
+        //UpdateGameDetailsWidgetService.startActionUpdateGameDetails(getApplicationContext(), details);
+
         if (details.image != null && details.image != "") {
             ImageLoader.fetchImageIntoView(details.image, preview);
         }

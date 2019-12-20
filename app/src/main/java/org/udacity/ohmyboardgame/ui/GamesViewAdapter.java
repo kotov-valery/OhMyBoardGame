@@ -1,5 +1,6 @@
 package org.udacity.ohmyboardgame.ui;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,11 @@ public class GamesViewAdapter extends RecyclerView.Adapter<GamesViewAdapter.Game
     @Override
     public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
         BoardGame game = games.list.get(position);
-        //Log.d(TAG, "Thumbnail: " + game.thumbnail.value);
-        ImageLoader.fetchImageIntoView(game.thumbnail.value, holder.thumbnail);
+        if (!TextUtils.isEmpty(game.image)) {
+            ImageLoader.fetchImageIntoView(game.image, holder.thumbnail);
+        } else {
+            ImageLoader.fetchImageIntoView(game.thumbnail.value, holder.thumbnail);
+        }
     }
 
     @Override
