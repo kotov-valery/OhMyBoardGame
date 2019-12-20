@@ -60,7 +60,7 @@ public class BoardGameGeek {
         });
     }
 
-    public static void fetchGameDetails(BoardGame game, final GameDetailsPublisher publisher) {
+    public static void fetchGameDetails(int gameId, final GameDetailsPublisher publisher) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BoardGameGeekService.API_BASE_URL)
                 .addConverterFactory(SimpleXmlConverterFactory.create())
@@ -70,7 +70,7 @@ public class BoardGameGeek {
                 retrofit.create(BoardGameGeekService.BoardGameGeekAPI.class);
 
         Call<GameDetailsList> call = service.fetchGameDetails(
-                game.id, BoardGameGeekService.QUERY_STATS);
+                gameId, BoardGameGeekService.QUERY_STATS);
         call.enqueue(new Callback<GameDetailsList>() {
             @Override
             public void onResponse(Call<GameDetailsList> call, Response<GameDetailsList> response) {

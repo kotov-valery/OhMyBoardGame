@@ -120,9 +120,7 @@ public class MainActivity extends AppCompatActivity {
         public void onGameFound(QueryResults results) {
             if (results.list.size() > 0) {
                 QueryResult topResult = results.list.get(0);
-                BoardGame game = new BoardGame();
-                game.id = topResult.id;
-                BoardGameGeek.fetchGameDetails(game, this);
+                BoardGameGeek.fetchGameDetails(topResult.id, this);
             }
         }
 
@@ -177,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         public Void loadInBackground() {
             for (BoardGame game: games.list) {
                 if (!game.isHighResolution) {
-                    BoardGameGeek.fetchGameDetails(game, this);
+                    BoardGameGeek.fetchGameDetails(game.id, this);
                 }
             }
             return null;

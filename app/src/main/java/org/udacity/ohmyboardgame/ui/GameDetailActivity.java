@@ -8,7 +8,10 @@ import com.google.gson.Gson;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -17,19 +20,20 @@ import org.udacity.ohmyboardgame.R;
 import org.udacity.ohmyboardgame.backend.BoardGameGeek;
 import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.GameDetails;
+import org.udacity.ohmyboardgame.model.GameDetailsViewModel;
+import org.udacity.ohmyboardgame.model.GameDetailsViewModelFactory;
 import org.udacity.ohmyboardgame.persistency.BoardGameDao;
 import org.udacity.ohmyboardgame.persistency.BoardGamesStorage;
 import org.udacity.ohmyboardgame.utility.AppExecutors;
 import org.udacity.ohmyboardgame.utility.ImageLoader;
 
-public class GameDetailActivity extends AppCompatActivity
-    implements BoardGameGeek.GameDetailsPublisher
-{
+public class GameDetailActivity extends AppCompatActivity {
     private static final String TAG = GameDetailActivity.class.getSimpleName();
 
     public static final String GAME_OBJECT = "game-object";
 
     private BoardGame game;
+    private GameDetailsViewModel gameDetailsViewModel;
 
     private ThreeTwoImageView preview;
     private TextView title;
@@ -95,19 +99,43 @@ public class GameDetailActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             if (intent != null && intent.hasExtra(GAME_OBJECT)) {
-                String movieJSON = intent.getStringExtra(GAME_OBJECT);
-                game = (new Gson()).fromJson(movieJSON, BoardGame.class);
+                game = toBoardGame(intent.getStringExtra(GAME_OBJECT));
             }
+        } else if (savedInstanceState.containsKey(GAME_OBJECT)) {
+            game = toBoardGame(savedInstanceState.getString(GAME_OBJECT));
         }
 
+        Log.d(TAG, "Do we have an id? " + game.id);
         if (game != null) {
-            BoardGameGeek.fetchGameDetails(game, this);
-            ImageLoader.fetchImageIntoView(game.thumbnail.value, preview);
+            int gameId = game.id;
+            GameDetailsViewModelFactory factory = new GameDetailsViewModelFactory(gameId);
+            gameDetailsViewModel = ViewModelProviders.of(this, factory).get(GameDetailsViewModel.class);
+            gameDetailsViewModel.getGameDetails().observe(this, new Observer<GameDetails>() {
+                @Override
+                public void onChanged(GameDetails details) {
+                    updateUI(details);
+                }
+            });
 
+            ImageLoader.fetchImageIntoView(game.thumbnail.value, preview);
             title.setText(game.name.value + "(" + game.publishYear.value + ")");
 
             updateFavoriteButton();
         }
+    }
+
+    private static String toJson(BoardGame game) {
+        return (new Gson()).toJson(game);
+    }
+
+    private static BoardGame toBoardGame(String json) {
+        return (new Gson()).fromJson(json, BoardGame.class);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(GAME_OBJECT, toJson(game));
+        super.onSaveInstanceState(outState);
     }
 
     private void updateFavoriteButton() {
@@ -115,8 +143,7 @@ public class GameDetailActivity extends AppCompatActivity
                 R.drawable.ic_favorite_filled : R.drawable.ic_favorite_empty);
     }
 
-    @Override
-    public void publishGameDetails(GameDetails details) {
+    private void updateUI(GameDetails details) {
         if (details.image != null && details.image != "") {
             ImageLoader.fetchImageIntoView(details.image, preview);
         }
