@@ -5,6 +5,13 @@
     <integer name="game_list_columns_count">2</integer>
     <dimen name="thumbnail_height">260dp</dimen>
 
+    <!-- search box -->
+    <dimen name="search_box_title_text_size">28sp</dimen>
+    <dimen name="search_box_icon_top_and_bottom_padding">8dp</dimen>
+    <dimen name="search_box_icon_left_and_right_margin">16dp</dimen>
+    <dimen name="search_box_edit_top_margin">16dp</dimen>
+    <dimen name="search_box_edit_margins">8dp</dimen>
+
     <!-- details screen -->
     <dimen name="details_content_top_padding">274dp</dimen>
     <dimen name="details_game_title_padding">16dp</dimen>

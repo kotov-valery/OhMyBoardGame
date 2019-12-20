@@ -3,8 +3,8 @@ package org.udacity.ohmyboardgame.data;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
-@Root(strict = false)
-public class Name {
+@Root(name = "item", strict = false)
+public class QueryResult {
     @Attribute
-    public String value;
+    public int id;
 }

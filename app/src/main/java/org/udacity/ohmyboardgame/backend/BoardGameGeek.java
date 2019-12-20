@@ -6,6 +6,8 @@ import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.BoardGames;
 import org.udacity.ohmyboardgame.data.GameDetails;
 import org.udacity.ohmyboardgame.data.GameDetailsList;
+import org.udacity.ohmyboardgame.data.QueryResult;
+import org.udacity.ohmyboardgame.data.QueryResults;
 import org.udacity.ohmyboardgame.ui.GamesViewAdapter;
 
 import retrofit2.Call;
@@ -23,6 +25,10 @@ public class BoardGameGeek {
 
     public interface GameListLoadedListener {
         void onLoadingCompleted(BoardGames games);
+    }
+
+    public interface GameFoundListener {
+        void onGameFound(QueryResults results);
     }
 
     public static void fetchHotGames(final GameListLoadedListener listener) {
@@ -48,7 +54,7 @@ public class BoardGameGeek {
 
             @Override
             public void onFailure(Call<BoardGames> call, Throwable t) {
-                Log.e(TAG, "Failed to request movie db API: " + t.getMessage());
+                Log.e(TAG, "Failed to fetch board games list: " + t.getMessage());
                 t.getStackTrace();
             }
         });
@@ -81,7 +87,37 @@ public class BoardGameGeek {
 
             @Override
             public void onFailure(Call<GameDetailsList> call, Throwable t) {
-                Log.e(TAG, "Failed to request movie db API: " + t.getMessage());
+                Log.e(TAG, "Failed to get game details: " + t.getMessage());
+                t.getStackTrace();
+            }
+        });
+    }
+
+
+    public static void findByQuery(String query, final GameFoundListener listener) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BoardGameGeekService.API_BASE_URL)
+                .addConverterFactory(SimpleXmlConverterFactory.create())
+                .build();
+
+        BoardGameGeekService.BoardGameGeekAPI service =
+                retrofit.create(BoardGameGeekService.BoardGameGeekAPI.class);
+
+        Call<QueryResults> call = service.findByQuery(query);
+        call.enqueue(new Callback<QueryResults>() {
+            @Override
+            public void onResponse(Call<QueryResults> call, Response<QueryResults> response) {
+                try {
+                    QueryResults results = response.body();
+                    listener.onGameFound(results);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QueryResults> call, Throwable t) {
+                Log.e(TAG, "Failed to query a game: " + t.getMessage());
                 t.getStackTrace();
             }
         });

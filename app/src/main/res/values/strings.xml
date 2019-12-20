@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Oh My Board Game!</string>
 
+    <!-- Main activity -->
+    <string name="find_a_game_dialog_title">I am looking for</string>
+    <string name="find_a_game_dialog_hint">Please enter a game you would like to find here</string>
+    <string name="find_a_game_search">Find</string>
+    <string name="find_a_game_canel">Cancel</string>
+
     <!-- Game details activity content -->
     <string name="overview_section">Overview</string>
     <string name="description_section">Description</string>
