@@ -8,16 +8,15 @@ import com.google.gson.Gson;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import org.udacity.ohmyboardgame.R;
-import org.udacity.ohmyboardgame.backend.BoardGameGeek;
 import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.GameDetails;
 import org.udacity.ohmyboardgame.model.GameDetailsViewModel;
@@ -75,6 +74,7 @@ public class GameDetailActivity extends AppCompatActivity {
         storage = BoardGamesStorage.getInstance(getApplicationContext());
 
         saveToFavorites = findViewById(R.id.add_to_favorites);
+        saveToFavorites.setEnabled(false);
         saveToFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,9 +105,8 @@ public class GameDetailActivity extends AppCompatActivity {
             game = toBoardGame(savedInstanceState.getString(GAME_OBJECT));
         }
 
-        Log.d(TAG, "Do we have an id? " + game.id);
         if (game != null) {
-            int gameId = game.id;
+            final int gameId = game.id;
             GameDetailsViewModelFactory factory = new GameDetailsViewModelFactory(gameId);
             gameDetailsViewModel = ViewModelProviders.of(this, factory).get(GameDetailsViewModel.class);
             gameDetailsViewModel.getGameDetails().observe(this, new Observer<GameDetails>() {
@@ -120,7 +119,27 @@ public class GameDetailActivity extends AppCompatActivity {
             ImageLoader.fetchImageIntoView(game.thumbnail.value, preview);
             title.setText(game.name.value + "(" + game.publishYear.value + ")");
 
-            updateFavoriteButton();
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    final LiveData<BoardGame> gameObserver = storage.boardGameDao().findAGameById(gameId);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            gameObserver.observe(GameDetailActivity.this, new Observer<BoardGame>() {
+                                @Override
+                                public void onChanged(BoardGame boardGame) {
+                                    if (boardGame != null) {
+                                        game.isFavorite = true;
+                                    }
+                                    updateFavoriteButton();
+                                    saveToFavorites.setEnabled(true);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         }
     }
 

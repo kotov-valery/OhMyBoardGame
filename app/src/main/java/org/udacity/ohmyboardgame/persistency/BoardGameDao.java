@@ -15,6 +15,9 @@ public interface BoardGameDao {
     @Query("SELECT * FROM board_game")
     LiveData<List<BoardGame>> getAll();
 
+    @Query("SELECT * FROM board_game WHERE id LIKE :id LIMIT 1")
+    LiveData<BoardGame> findAGameById(int id);
+
     @Insert
     void insertAGame(BoardGame game);
 
