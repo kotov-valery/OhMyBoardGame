@@ -16,6 +16,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        demo {
+            dimension "version"
+            applicationIdSuffix ".demo"
+            versionNameSuffix "-demo"
+        }
+        full {
+            dimension "version"
+            applicationIdSuffix ".full"
+            versionNameSuffix "-full"
+        }
+    }
 }
 
 dependencies {
@@ -37,6 +51,8 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.2.3"
 
     implementation 'com.google.android.material:material:1.0.0'
+
+    implementation 'com.google.firebase:firebase-ads:18.3.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
