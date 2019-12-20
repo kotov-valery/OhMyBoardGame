@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.loader.app.LoaderManager;
@@ -15,9 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -34,14 +37,25 @@ import org.udacity.ohmyboardgame.data.QueryResult;
 import org.udacity.ohmyboardgame.data.QueryResults;
 import org.udacity.ohmyboardgame.data.Thumbnail;
 import org.udacity.ohmyboardgame.model.ArticleListModel;
+import org.udacity.ohmyboardgame.persistency.BoardGamesStorage;
+import org.udacity.ohmyboardgame.utility.AppExecutors;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String FILTER_CATEGORY = "filter-category";
+    private int filterCategory;
+
+    private static final int FILTER_BY_WHAT_IS_HOT = 0;
+    private static final int FILTER_BY_MY_FAVORITES = 1;
 
     private RecyclerView boardGamesList;
     private GamesViewAdapter adapter;
     private ArticleListModel articleListModel;
     private QueriedGameFoundListener queriedGameFoundListener;
+    BoardGamesStorage storage;
 
     private static final int HIGH_RESOLUTION_POSTER_PATH_LOADER = 0;
 
@@ -51,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         queriedGameFoundListener = new QueriedGameFoundListener();
+
+        storage = BoardGamesStorage.getInstance(getApplicationContext());
 
         FloatingActionButton fab = findViewById(R.id.search_for_a_game);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -69,17 +85,46 @@ public class MainActivity extends AppCompatActivity {
                 getResources().getInteger(R.integer.game_list_columns_count));
         boardGamesList.setLayoutManager(layoutManager);
 
-        articleListModel = ViewModelProviders.of(this).get(ArticleListModel.class);
-        articleListModel.getGames().observe(this, new Observer<BoardGames>() {
-            @Override
-            public void onChanged(BoardGames boardGames) {
-                adapter.setNewGames(boardGames);
-                fetchHightResolutionImages(boardGames);
-            }
-        });
+        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+        filterCategory = preferences.getInt(FILTER_CATEGORY, FILTER_BY_WHAT_IS_HOT);
+
+        updateUI();
     }
 
-    public void createDialog() {
+    private void updateUI() {
+        if (filterCategory == FILTER_BY_WHAT_IS_HOT) {
+            articleListModel = ViewModelProviders.of(this).get(ArticleListModel.class);
+            articleListModel.getGames().observe(this, new Observer<BoardGames>() {
+                @Override
+                public void onChanged(BoardGames boardGames) {
+                    adapter.setNewGames(boardGames);
+                    fetchHightResolutionImages(boardGames);
+                }
+            });
+        } else if (filterCategory == FILTER_BY_MY_FAVORITES) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    final LiveData<List<BoardGame>> games = storage.boardGameDao().getAll();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            games.observe(MainActivity.this, new Observer<List<BoardGame>>() {
+                                @Override
+                                public void onChanged(List<BoardGame> boardGames) {
+                                    BoardGames games = new BoardGames();
+                                    games.list = boardGames;
+                                    adapter.setNewGames(games);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private void createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
         LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
@@ -192,5 +237,43 @@ public class MainActivity extends AppCompatActivity {
             }
             model.getGames().setValue(games);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuItem activeItem;
+        if (filterCategory == FILTER_BY_MY_FAVORITES) {
+            activeItem = menu.findItem(R.id.show_my_favorites);
+        } else {
+            activeItem = menu.findItem(R.id.show_whats_hot);
+        }
+        activeItem.setChecked(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.show_whats_hot && !item.isChecked()) {
+            item.setChecked(true);
+            saveUserPreferences(FILTER_BY_WHAT_IS_HOT);
+            updateUI();
+            return true;
+        } else if (id == R.id.show_my_favorites && !item.isChecked()) {
+            item.setChecked(true);
+            saveUserPreferences(FILTER_BY_MY_FAVORITES);
+            updateUI();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveUserPreferences(int filterCategory) {
+        this.filterCategory = filterCategory;
+        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(FILTER_CATEGORY, filterCategory);
+        editor.commit();
     }
 }

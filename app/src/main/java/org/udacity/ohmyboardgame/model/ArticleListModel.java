@@ -9,13 +9,13 @@ import org.udacity.ohmyboardgame.data.BoardGames;
 public class ArticleListModel extends ViewModel
     implements BoardGameGeek.GameListLoadedListener
 {
-    private MutableLiveData<BoardGames> games = new MutableLiveData<>();
-
-    public ArticleListModel() {
-        fetchGames();
-    }
+    private MutableLiveData<BoardGames> games;
 
     public MutableLiveData<BoardGames> getGames() {
+        if (games == null) {
+            games = new MutableLiveData<>();
+            fetchGames();
+        }
         return games;
     }
 

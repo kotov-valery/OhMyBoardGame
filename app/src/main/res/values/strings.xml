@@ -7,6 +7,10 @@
     <string name="find_a_game_search">Find</string>
     <string name="find_a_game_canel">Cancel</string>
 
+    <string name="show_category">Filter games</string>
+    <string name="show_whats_hot">Show what is hot</string>
+    <string name="show_my_favorites">Show my favorite games</string>
+
     <!-- Game details activity content -->
     <string name="overview_section">Overview</string>
     <string name="description_section">Description</string>

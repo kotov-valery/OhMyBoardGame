@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.MainActivity">
+    <group
+        android:id="@+id/show_category_filter"
+        android:orderInCategory="1"
+        android:title="@string/show_category"
+        android:checkableBehavior="single">
+        app:showAsAction="ifRoom">
+        <item android:id="@+id/show_whats_hot"
+            android:checked="true"
+            android:title="@string/show_whats_hot" />
+        <item android:id="@+id/show_my_favorites"
+            android:title="@string/show_my_favorites" />
+    </group>
+</menu>
