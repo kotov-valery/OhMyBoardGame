@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,9 +16,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.udacity.ohmyboardgame.R;
-import org.udacity.ohmyboardgame.appwidget.UpdateGameDetailsWidgetService;
 import org.udacity.ohmyboardgame.data.BoardGame;
 import org.udacity.ohmyboardgame.data.GameDetails;
+import org.udacity.ohmyboardgame.data.Ratings;
 import org.udacity.ohmyboardgame.model.GameDetailsViewModel;
 import org.udacity.ohmyboardgame.model.GameDetailsViewModelFactory;
 import org.udacity.ohmyboardgame.persistency.BoardGameDao;
@@ -119,7 +118,9 @@ public class GameDetailActivity extends AppCompatActivity {
             });
 
             ImageLoader.fetchImageIntoView(game.thumbnail.value, preview);
-            title.setText(game.name.value + "(" + game.publishYear.value + ")");
+            String mainTitle = getResources().getString(R.string.game_main_title_with_year,
+                    game.name.value, game.publishYear.value);
+            title.setText(mainTitle);
 
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
@@ -157,6 +158,10 @@ public class GameDetailActivity extends AppCompatActivity {
     }
 
     private void updateUI(GameDetails details) {
+        if (details == null) {
+            Log.w(TAG, "Could not update game details, no details are available");
+            return;
+        }
         //UpdateGameDetailsWidgetService.startActionUpdateGameDetails(getApplicationContext(), details);
 
         if (details.image != null && details.image != "") {
@@ -165,33 +170,36 @@ public class GameDetailActivity extends AppCompatActivity {
 
         description.setText(details.description);
         if (details.minplayers.value > 0 && details.maxplayers.value > 0) {
-            players.setText(details.minplayers.value + " - " + details.maxplayers.value);
+            String playersCount = getResources().getString(R.string.game_players_count_range,
+                    details.minplayers.value, details.maxplayers.value);
+            players.setText(playersCount);
         } else {
             players.setText(getString(R.string.players_count_is_not_available));
         }
 
         if (details.playingTime.value > 0) {
-            playingTime.setText(Integer.toString(details.playingTime.value));
+            playingTime.setText(String.format("%d", details.playingTime.value));
         } else {
             playingTime.setText(getString(R.string.playing_time_is_not_available));
         }
 
-        if (details.statistics != null && details.statistics.ratings != null &&
-                details.statistics.ratings.averageRating != null &&
-                details.statistics.ratings.averageRating.value != null &&
-                details.statistics.ratings.averageRating.value.length() >= 4) {
-            avgRating.setText(details.statistics.ratings.averageRating.value.substring(0, 3));
-        } else {
-            avgRating.setText(getString(R.string.game_average_rating_is_not_available));
-        }
+        if (details.statistics != null && details.statistics.ratings != null) {
+            Ratings ratings = details.statistics.ratings;
+            if (ratings.averageRating != null && ratings.averageRating.value != null &&
+                    ratings.averageRating.value.length() >= 4) {
+                avgRating.setText(ratings.averageRating.value.substring(0, 3));
+            } else {
+                avgRating.setText(getString(R.string.game_average_rating_is_not_available));
+            }
 
-        if (details.statistics != null && details.statistics.ratings != null &&
-                details.statistics.ratings.averageWeight!= null &&
-                details.statistics.ratings.averageWeight.value != null &&
-                details.statistics.ratings.averageWeight.value.length() >= 4) {
-            avgComplexity.setText(details.statistics.ratings.averageWeight.value.substring(0, 3) + "/5");
-        } else {
-            avgComplexity.setText(getString(R.string.game_average_complexity_is_not_available));
+            if (ratings.averageWeight != null && ratings.averageWeight.value != null &&
+                    ratings.averageWeight.value.length() >= 4) {
+                String complexity = getResources().getString(R.string.game_complexity_on_scale,
+                        ratings.averageWeight.value.substring(0, 3));
+                avgComplexity.setText(complexity);
+            } else {
+                avgComplexity.setText(getString(R.string.game_average_complexity_is_not_available));
+            }
         }
     }
 }

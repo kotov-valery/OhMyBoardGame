@@ -21,6 +21,10 @@
     <string name="img_playing_time_description">Average game playing time</string>
     <string name="img_average_complexity_description">Averga game complexity on a scale from 1 to 5</string>
 
+    <string name="game_main_title_with_year">%1$s (%2$s)</string>
+    <string name="game_players_count_range">%1$d - %2$d</string>
+    <string name="game_complexity_on_scale">%1$s/5</string>
+
     <!-- Error strings -->
     <string name="connection_error">Could not get game information from BoardGameGeek</string>
     <string name="players_count_is_not_available">N/A</string>

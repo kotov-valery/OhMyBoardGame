@@ -14,8 +14,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/search_box_icon_top_and_bottom_padding"
             android:paddingBottom="@dimen/search_box_icon_top_and_bottom_padding"
-            android:layout_marginLeft="@dimen/search_box_icon_left_and_right_margin"
-            android:layout_marginRight="@dimen/search_box_icon_left_and_right_margin"
+            android:layout_marginStart="@dimen/search_box_icon_left_and_right_margin"
+            android:layout_marginEnd="@dimen/search_box_icon_left_and_right_margin"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/img_search_dialog_description"
             android:src="@drawable/ic_search_dialog" />
@@ -34,8 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/search_box_edit_top_margin"
-        android:layout_marginLeft="@dimen/search_box_edit_margins"
-        android:layout_marginRight="@dimen/search_box_edit_margins"
+        android:layout_marginStart="@dimen/search_box_edit_margins"
+        android:layout_marginEnd="@dimen/search_box_edit_margins"
         android:layout_marginBottom="@dimen/search_box_edit_margins"
         android:hint="@string/find_a_game_dialog_hint" />
 
