@@ -12,11 +12,13 @@
             android:id="@+id/appwidget_preview_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/img_appwidget_background_description"
             android:scaleType="centerCrop" />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/img_appwidget_background_protection_description"
             android:background="@drawable/photo_background_protection" />
 
         <LinearLayout

@@ -17,6 +17,7 @@
             android:layout_marginLeft="@dimen/search_box_icon_left_and_right_margin"
             android:layout_marginRight="@dimen/search_box_icon_left_and_right_margin"
             android:layout_gravity="center_vertical"
+            android:contentDescription="@string/img_search_dialog_description"
             android:src="@drawable/ic_search_dialog" />
         <TextView
             android:layout_width="match_parent"

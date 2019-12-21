@@ -5,7 +5,9 @@
     <string name="find_a_game_dialog_title">I am looking for</string>
     <string name="find_a_game_dialog_hint">Please enter a game you would like to find here</string>
     <string name="find_a_game_search">Find</string>
-    <string name="find_a_game_canel">Cancel</string>
+    <string name="find_a_game_cancel">Cancel</string>
+    <string name="img_search_dialog_description">Find a game by name</string>
+    <string name="img_game_thumbnail_description">Game poster preview</string>
 
     <string name="show_category">Filter games</string>
     <string name="show_whats_hot">Show what is hot</string>
@@ -14,6 +16,10 @@
     <!-- Game details activity content -->
     <string name="overview_section">Overview</string>
     <string name="description_section">Description</string>
+    <string name="img_average_rating_description">Average game rating on a scale from 1 to 10</string>
+    <string name="img_player_count_description">Possible amount of players</string>
+    <string name="img_playing_time_description">Average game playing time</string>
+    <string name="img_average_complexity_description">Averga game complexity on a scale from 1 to 5</string>
 
     <!-- Error strings -->
     <string name="connection_error">Could not get game information from BoardGameGeek</string>
@@ -25,4 +31,6 @@
     <!-- app widget -->
     <string name="appwidget_default_text">Please pick a game to see details</string>
     <string name="add_widget">Add widget</string>
+    <string name="img_appwidget_background_description">Game poster preview in a widget</string>
+    <string name="img_appwidget_background_protection_description">Gradient half transparent image on top of a poster</string>
 </resources>

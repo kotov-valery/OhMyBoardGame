@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton(R.string.find_a_game_canel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.find_a_game_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void fetchHightResolutionImages(final BoardGames games) {
+    public void fetchHighResolutionImages(final BoardGames games) {
         getSupportLoaderManager().initLoader(HIGH_RESOLUTION_POSTER_PATH_LOADER, null,
                 new LoaderManager.LoaderCallbacks<Void>() {
                     @Override
